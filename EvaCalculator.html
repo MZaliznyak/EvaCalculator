@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Калькулятор цены адены</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            padding: 20px;
+        }
+        .calculator {
+            max-width: 400px;
+            margin: auto;
+            border: 1px solid #ccc;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        .calculator input {
+            width: 100%;
+            margin-bottom: 10px;
+            padding: 8px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+        }
+        .calculator button {
+            width: 100%;
+            padding: 10px;
+            background-color: #28a745;
+            color: #fff;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+        .calculator button:hover {
+            background-color: #218838;
+        }
+        .result {
+            margin-top: 10px;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="calculator">
+        <h3>Калькулятор цены адены</h3>
+        <label for="rubles">Цена набора (в рублях):</label>
+        <input type="number" id="rubles" value="6750" min="1">
+        
+        <label for="coins">Монеты L в наборе:</label>
+        <input type="number" id="coins" value="1000" min="1">
+        
+        <label for="seals">Печати Гирана в наборе:</label>
+        <input type="number" id="seals" value="1500" min="1">
+        
+        <label for="sealPrice">Цена одной печати Гирана (монеты L):</label>
+        <input type="number" id="sealPrice" value="32" min="1">
+        
+        <label for="sealToAden">Курс продажи печати Гирана (аден):</label>
+        <input type="number" id="sealToAden" value="297000" min="1">
+        
+        <button onclick="calculateAdenPrice()">Рассчитать</button>
+        <div class="result" id="result"></div>
+    </div>
+
+    <script>
+        function calculateAdenPrice() {
+            // Получаем значения из полей ввода
+            const rubles = parseFloat(document.getElementById('rubles').value) || 0;
+            const coins = parseInt(document.getElementById('coins').value) || 0;
+            const seals = parseInt(document.getElementById('seals').value) || 0;
+            const sealPrice = parseFloat(document.getElementById('sealPrice').value) || 0;
+            const sealToAden = parseFloat(document.getElementById('sealToAden').value) || 0;
+
+            // Рассчитываем общее количество печатей Гирана
+            const sealsFromCoins = Math.floor(coins / sealPrice);
+            const totalSeals = seals + sealsFromCoins;
+
+            // Рассчитываем общее количество аден
+            const totalAden = totalSeals * sealToAden;
+
+            // Рассчитываем цену адены за рубли
+            const pricePerAden = rubles / totalAden;
+            const pricePerMillion = pricePerAden * 1_000_000;
+
+            // Вывод результата
+            document.getElementById('result').innerHTML = `
+                <p>Всего аден: ${totalAden.toLocaleString()} аден</p>
+                <p>Цена 1 адены: ${pricePerAden.toFixed(8)} руб.</p>
+                <p>Цена 1 миллиона аден: ${pricePerMillion.toFixed(2)} руб.</p>
+            `;
+        }
+    </script>
+</body>
+</html>
